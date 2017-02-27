@@ -7,13 +7,13 @@ import ast
 
 GUI_SERVER = {
     "host": "portal.terrene.co",
-    "port": "443",
+    "port": 443,
     "protocol": "https"
 }
 
 API_SERVER = {
     "host": "api.terrene.co",
-    "port": "443",
+    "port": 443,
     "protocol": "https"
 }
 

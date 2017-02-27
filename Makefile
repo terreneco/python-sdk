@@ -21,3 +21,6 @@ pip:
 
 python:
 	${PYTHON} $(filter-out $@,$(MAKECMDGOALS));
+
+test:
+	make python src/test.py
