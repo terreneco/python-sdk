@@ -3,7 +3,6 @@
 Please visit [Terrene's python docs](https://docs.terrene.co/?python) 
 to get started.
 
-
 # Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
@@ -120,3 +119,22 @@ A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
 OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+# Development
+
+## Install From Source
+
+```
+git clone git@git.terrene.co:General/python-sdk.git
+cd python-sdk
+make init
+```
+
+## Run Tests
+
+To test the package run the following command
+```
+make test USERNAME="<email>" PASSWORD="<password>"  API_SERVER='{"host": "localhost", "port": 8000, "protocol": 
+"http"}' 
+```
