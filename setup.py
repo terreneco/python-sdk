@@ -16,6 +16,7 @@ setup(
     author_email="developers@terrene.co",
     license='MIT',
     keywords="terrene",
+    download_url="https://git.terrene.co/General/python-sdk/repository/archive.tar.gz?ref=release",
     install_requires=requirements[1:],
     classifiers=[
         'Development Status :: 3 - Alpha',

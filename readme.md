@@ -138,3 +138,8 @@ To test the package run the following command
 make test USERNAME="<email>" PASSWORD="<password>"  API_SERVER='{"host": "localhost", "port": 8000, "protocol": 
 "http"}' 
 ```
+
+## Release
+
+To release the package, update the version in setup.py and merge the changes
+to the `master` branch.
