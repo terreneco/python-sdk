@@ -155,6 +155,10 @@ class APIResource(object):
         except KeyError:
             raise AttributeError
 
+    def __str__(self):
+        from beeprint import pp
+        return pp(vars(self), output=False)
+
 
 class APIResourceManagementClient(object):
     """
@@ -192,6 +196,30 @@ class APIResourceManagementClient(object):
             raise NotImplementedError()
         self._auth = auth
 
+    def create(self, parameters):
+        """
+        Args:
+            parameters: a list of parameters for this resource
+             to be created according to
+
+        Returns:
+            self._resource_class instance
+        
+        Raises:
+            None
+        """
+        res = requests.post(
+            "%s/%s/" % (
+                get_api_url(),
+                self._namespace
+            ),
+            data=parameters,
+            headers=self._headers
+        )
+        if res.status_code == 201:
+            return self.get(res.json().get('object_id'))
+        raise UnknownError
+
     def get(self, object_id):
         """
         Args:
@@ -199,7 +227,7 @@ class APIResourceManagementClient(object):
                 to be retrieved
 
         Returns:
-            None
+            self._resource_class instance
 
         Raises:
             None
@@ -209,6 +237,9 @@ class APIResourceManagementClient(object):
             namespace=self._namespace,
             auth=self._auth
         )
+
+    def delete(self, object_id):
+        return self.get(object_id).delete()
 
     def list(self, parameters={}):
         """
@@ -250,3 +281,7 @@ class APIResourceManagementClient(object):
             raise NotFoundError()
         else:
             raise UnknownError()
+
+    def __str__(self):
+        from beeprint import pp
+        return pp(vars(self), output=False)
