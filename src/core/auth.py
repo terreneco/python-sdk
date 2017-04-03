@@ -44,6 +44,10 @@ class _AbstractCredentials(object):
         """
         raise NotImplementedError()
 
+    def __str__(self):
+        from beeprint import pp
+        return pp(vars(self), output=False)
+
 
 class UserPassCredentials(_AbstractCredentials):
 
