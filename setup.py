@@ -9,8 +9,10 @@ setup(
     author_email="developers@terrene.co",
     license='MIT',
     keywords="terrene",
-    package_dir={'':'src'},
-    packages=find_packages(),
+    packages=[
+        'terrene'
+    ],
+    install_requires=[],
     classifiers=[
         'Development Status :: 3 - Alpha',
 
