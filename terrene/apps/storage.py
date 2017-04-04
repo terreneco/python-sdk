@@ -1,6 +1,6 @@
 import requests
-from core.apps import ServiceManagementClient, Service
-from utils.exceptions import NotAuthorizedError, NotFoundError, UnknownError
+from terrene.core.apps import ServiceManagementClient, Service
+from terrene.utils.exceptions import NotAuthorizedError, NotFoundError, UnknownError
 from azure.storage.table import TableService, Entity
 import uuid
 

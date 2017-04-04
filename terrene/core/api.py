@@ -1,6 +1,6 @@
 import requests
-from utils.urls import get_api_url
-from utils.exceptions import NotAuthorizedError, NotFoundError, UnknownError
+from terrene.utils.urls import get_api_url
+from terrene.utils.exceptions import NotAuthorizedError, NotFoundError, UnknownError
 
 
 class APIResource(object):

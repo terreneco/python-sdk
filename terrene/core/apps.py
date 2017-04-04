@@ -1,4 +1,4 @@
-from core.api import APIResourceManagementClient, APIResource
+from terrene.core.api import APIResourceManagementClient, APIResource
 
 
 class Service(APIResource):

@@ -1,6 +1,6 @@
-from core.auth import UserPassCredentials
-from apps.collectors import CollectorManagementClient
-from apps.storage import StorageManagementClient
+from .core.auth import UserPassCredentials
+from .apps.collectors import CollectorManagementClient
+from .apps.storage import StorageManagementClient
 import os
 
 creds = UserPassCredentials(

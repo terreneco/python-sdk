@@ -1,4 +1,4 @@
-from conf import API_SERVER, GUI_SERVER
+from terrene.conf import API_SERVER, GUI_SERVER
 
 
 def _construct_url(url_object):

@@ -1,7 +1,7 @@
 import requests
-from core.api import APIResourceManagementClient, APIResource
-from utils.urls import get_api_url
-from utils.exceptions import NotAuthorizedError, UnknownError
+from terrene.core.api import APIResourceManagementClient, APIResource
+from terrene.utils.urls import get_api_url
+from terrene.utils.exceptions import NotAuthorizedError, UnknownError
 
 
 class _AbstractCredentials(object):
