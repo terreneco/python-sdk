@@ -16,7 +16,8 @@ setup(
     packages=[
         'terrene.apps',
         'terrene.core',
-        'terrene.utils'
+        'terrene.utils',
+        'terrene.conf'
     ],
     install_requires=required[1:],
     classifiers=[
