@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 with open('requirements.txt') as f:
@@ -13,12 +13,7 @@ setup(
     author_email="developers@terrene.co",
     license='MIT',
     keywords="terrene",
-    packages=[
-        'terrene.apps',
-        'terrene.core',
-        'terrene.utils',
-        'terrene.conf'
-    ],
+    packages=find_packages(exclude=["test"]),
     install_requires=required[1:],
     classifiers=[
         'Development Status :: 3 - Alpha',
