@@ -1,8 +1,8 @@
 from setuptools import setup
-from pip.req import parse_requirements
 
-install_reqs = parse_requirements("requirements.txt")
-reqs = [str(ir.req) for ir in install_reqs]
+
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
 
 setup(
     name="Terrene",
@@ -17,7 +17,7 @@ setup(
         'terrene.apps',
         'terrene.core'
     ],
-    install_requires=reqs,
+    install_requires=required,
     classifiers=[
         'Development Status :: 3 - Alpha',
 
