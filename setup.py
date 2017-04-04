@@ -2,14 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name="Terrene",
-    version="0.0.3",
+    version="0.0.4",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
     author_email="developers@terrene.co",
     license='MIT',
     keywords="terrene",
-    download_url="https://git.terrene.co/General/python-sdk/repository/archive.tar.gz?ref=release",
+    package_dir={'':'src'},
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
 
