@@ -10,7 +10,8 @@ setup(
     license='MIT',
     keywords="terrene",
     packages=[
-        'terrene'
+        'terrene.apps',
+        'terrene.core'
     ],
     install_requires=[],
     classifiers=[
