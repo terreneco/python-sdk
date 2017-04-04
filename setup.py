@@ -17,7 +17,7 @@ setup(
         'terrene.apps',
         'terrene.core'
     ],
-    install_requires=required,
+    install_requires=required[1:],
     classifiers=[
         'Development Status :: 3 - Alpha',
 
