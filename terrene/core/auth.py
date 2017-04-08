@@ -114,3 +114,36 @@ class UserPassCredentials(_AbstractCredentials):
     @property
     def authorization_header(self):
         return "JWT " + self._token
+
+
+class JWTCredentials(_AbstractCredentials):
+
+    @property
+    def authorization_header(self):
+        return "JWT " + self._token
+
+    def _setup(self, token):
+        """
+        Args:
+            token: JWT token
+
+        Returns:
+            None
+        """
+        self._token = token
+
+    def is_authorized(self):
+        """
+        Returns:
+            True: if authorized
+            False: if not authorized
+        """
+        res = requests.post(
+            "%s/users/actions/login/verify-token/" % get_api_url(),
+            data={
+                "token": self._token
+            }
+        )
+        if res.status_code == 200:
+            return True
+        return False

@@ -96,7 +96,7 @@ class Storage(Service):
     def query(self, filter_str, table_name, select_str=None):
         """
         Args:
-            filter_str: a query string to filter for.   
+            filter_str: a query string to filter for.
                 e.g. "PartitionKey eq 'tasksSeattle'"
             table_name: the name of the table to run the query on
             select_str: the attributes to select from the table
