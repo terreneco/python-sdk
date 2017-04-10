@@ -29,6 +29,9 @@ class StorageResource(object):
     def delete(self):
         self._storage.delete_record(self._data, self.table_name)
 
+    def serialize(self):
+        return self._data
+
     def __getattr__(self, item):
         try:
             return self._data[item]
