@@ -69,8 +69,8 @@ class Collector(Service):
             headers=self._headers
         )
         if res.status_code == 200:
-            self._access_key_name = res.json().get('key_name')
-            self._access_key_value = res.json().get('key_value')
+            self._access_key_name = res.json().get('key')
+            self._access_key_value = res.json().get('key_id')
 
             self._access_namespace = res.json().get('namespace')
 
