@@ -23,3 +23,9 @@ class UnknownError(Exception):
     Raised when an unknown error happens
     """
     pass
+
+
+class UnsupportedOperationError(Exception):
+    """
+    Raise when an operation is not supported
+    """
