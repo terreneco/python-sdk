@@ -1,4 +1,4 @@
-from terrene.conf import API_SERVER, GUI_SERVER
+from terrene.conf import terrene
 
 
 def _construct_url(url_object):
@@ -38,7 +38,7 @@ def get_gui_url():
     Raises:
         None
     """
-    return _construct_url(GUI_SERVER)
+    return _construct_url(terrene.gui_server)
 
 
 def get_api_url():
@@ -51,4 +51,4 @@ def get_api_url():
     Raises:
         None
     """
-    return _construct_url(API_SERVER)
+    return _construct_url(terrene.api_server)
