@@ -68,15 +68,18 @@ class TableStorage(Storage):
         )
 
     def insert_batch(self, data, table_name):
-        batch = TableBatch()
-        for entry in data:
-            entity = Entity()
-            entity.PartitionKey = table_name
-            entity.RowKey = str(uuid.uuid4())
-            for key, val in entry.items():
-                entity[key] = val
-            batch.insert_or_replace_entity(entity)
-        self._service.commit_batch(table_name, batch)
+
+        chunks = [data[x:x+100] for x in range(0, len(data), 100)]
+        for chunk in chunks:
+            batch = TableBatch()
+            for entry in chunk:
+                entity = Entity()
+                entity.PartitionKey = table_name
+                entity.RowKey = str(uuid.uuid4())
+                for key, val in entry.items():
+                    entity[key] = val
+                batch.insert_or_replace_entity(entity)
+            self._service.commit_batch(table_name, batch)
 
     def delete_record(self, data, table_name):
         self._service.delete_entity(
