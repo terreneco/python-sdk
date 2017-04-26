@@ -75,7 +75,7 @@ class TableStorage(Storage):
             entity.RowKey = str(uuid.uuid4())
             for key, val in entry.items():
                 entity[key] = val
-            batch.insert_or_replace_entity(entry)
+            batch.insert_or_replace_entity(entity)
         self._service.commit_batch(table_name, batch)
 
     def delete_record(self, data, table_name):
