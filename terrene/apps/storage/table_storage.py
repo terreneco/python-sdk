@@ -1,6 +1,6 @@
 import requests
 import uuid
-from azure.storage.table import TableService, Entity
+from azure.storage.table import TableService, Entity, TableBatch
 from .storage import Storage, StorageManagementClient
 
 
@@ -62,10 +62,21 @@ class TableStorage(Storage):
         for key, val in data.items():
             entity[key] = val
 
-        self._service.insert_entity(
+        self._service.insert_or_replace_entity(
             table_name=table_name,
             entity=entity
         )
+
+    def insert_batch(self, data, table_name):
+        batch = TableBatch()
+        for entry in data:
+            entity = Entity()
+            entity.PartitionKey = table_name
+            entity.RowKey = str(uuid.uuid4())
+            for key, val in entry.items():
+                entity[key] = val
+            batch.insert_or_replace_entity(entry)
+        self._service.commit_batch(table_name, batch)
 
     def delete_record(self, data, table_name):
         self._service.delete_entity(

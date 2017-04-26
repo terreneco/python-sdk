@@ -1,6 +1,6 @@
-from .core.auth import UserPassCredentials
-from .apps.collectors import CollectorManagementClient
-from .apps.storage import _StorageManagementClient
+from core.auth import UserPassCredentials
+from collectors import CollectorManagementClient
+from apps.storage import TableStorageManagementClient
 import os
 
 creds = UserPassCredentials(
@@ -15,15 +15,15 @@ collector = collector_management_client.list({
     "owners__email": os.environ.get('USERNAME')
 })
 
-storage_management_client = _StorageManagementClient(creds)
+storage_management_client = TableStorageManagementClient(creds)
 print(storage_management_client)
 
-# storage_management_client.create({
-#     "name"    : "my stuff",
-#     "contributors": [],
-#     "owners": [os.environ.get('USERNAME')],
-#     "region": "eastus"
-# })
+storage_management_client.create({
+    "name": "my stuff",
+    "contributors": [],
+    "owners": [os.environ.get('USERNAME')],
+    "region": "eastus"
+})
 
 storage = storage_management_client.list({
     "name": "my stuff"
