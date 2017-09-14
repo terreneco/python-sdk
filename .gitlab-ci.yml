@@ -1,3 +1,4 @@
 test:
   script:
+    - cmd/install
     - cmd/test
