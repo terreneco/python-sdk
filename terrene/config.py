@@ -16,6 +16,6 @@ api = URL(
     os.environ.get('API_HOST', 'api.terrene.co'),
     os.environ.get('API_PORT', 443))
 portal = URL(
-    os.environ.get('API_PROTOCOL', 'https'),
-    os.environ.get('API_HOST', 'portal.terrene.co'),
-    os.environ.get('API_PORT', 443))
+    os.environ.get('PORTAL_PROTOCOL', 'https'),
+    os.environ.get('PORTAL_HOST', 'portal.terrene.co'),
+    os.environ.get('PORTAL_PORT', 443))

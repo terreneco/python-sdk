@@ -19,8 +19,9 @@ cmd/install
 To test the package run the following command:
 
 ```bash
-cmd/test
+export EMAIL=<your_email>; export PASSWORD=<your_password>; cmd/test
 ```
+
 
 ### Update the package
 
@@ -29,6 +30,16 @@ To update to the latest version run the following command:
 ```bash
 cmd/update
 ```
+
+### Environmental Variables
+
+- API_PROTOCOL `default: https`
+- API_HOST `default: api.terrene.co`
+- API_PORT `default: 44s`
+- PORTAL_PROTOCOL `default: https`
+- PORTAL_HOST `default: portal.terrene.co`
+- PORTAL_PORT `default: 443`
+
 
 ## License
 
