@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# pull the updated code from the release branch
+git pull origin ${BRANCH:-release};
+
+# install new dependencies
+env/bin/pip install --upgrade -r requirements.txt
