@@ -44,12 +44,22 @@ class EndToEndTestCases(unittest.TestCase):
             name="my predictive model", description="predictive model",
             input_variables="Sex, Pclass, Fare, Parch, SibSp, Age, Cabin", output_variables="Survived")
         model.train(dataset=csv_file_input, epochs=100)
+        # retrain
+        model.train(dataset=csv_file_input, epochs=500)
 
         model_endpoint_manager = ModelEndpointManager(
             credentials=credentials, workspace=workspace)
         endpoint = model_endpoint_manager.create(
             enrich=model, name="my endpoint", description="used to make predictions")
 
+        endpoint.predict({
+            "Pclass": 1, "Age": 24, "Sex": "male",
+            "Embarked": "S", "SibSp": 0, "Parch": 0,
+            "Fare": 14.25, "Cabin": "C30"})
+        endpoint.predict({
+            "Pclass": 1, "Age": 24, "Sex": "male",
+            "Embarked": "S", "SibSp": 0, "Parch": 0,
+            "Fare": 14.25, "Cabin": "C30"})
         endpoint.predict({
             "Pclass": 1, "Age": 24, "Sex": "male",
             "Embarked": "S", "SibSp": 0, "Parch": 0,
