@@ -106,6 +106,9 @@ class BaseModelManager(CoreAPIMixin):
                 obj['object_id'], self.namespace, self.coreapi))
         return objs
 
+    def get(self, object_id):
+        return self.model(object_id, self.namespace, self.coreapi)
+
     def pre_create(self, **params):
         return params
 
