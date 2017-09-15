@@ -50,7 +50,8 @@ class EndToEndTestCases(unittest.TestCase):
         model_endpoint_manager = ModelEndpointManager(
             credentials=credentials, workspace=workspace)
         endpoint = model_endpoint_manager.create(
-            enrich=model, name="my endpoint", description="used to make predictions")
+            enrich=model, name="my endpoint", description="used to make predictions",
+            store=store, table="predictions")
 
         endpoint.predict({
             "Pclass": 1, "Age": 24, "Sex": "male",
@@ -64,5 +65,7 @@ class EndToEndTestCases(unittest.TestCase):
             "Pclass": 1, "Age": 24, "Sex": "male",
             "Embarked": "S", "SibSp": 0, "Parch": 0,
             "Fare": 14.25, "Cabin": "C30"})
+
+        print(store.read_rows(endpoint.table))
 
         workspace.delete()
