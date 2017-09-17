@@ -8,7 +8,7 @@ class ModelEndpoint(BaseApp):
             'object_id': self.object_id, 'input_json': json.dumps(params)})
 
     def pre_save(self):
-        for param in ['enrich', 'store']:
+        for param in ['enrich', 'store', 'workspace']:
             if self._data.get(param, None) is not None and \
                     not isinstance(self._data[param], str):
                 self._data[param] = self._data[param].object_id

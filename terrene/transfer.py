@@ -31,6 +31,27 @@ class FileInputManager(InputDatasetManager):
         params['file'] = File(params['store'], params['file'].read())
         return params
 
+    def pre_save(self):
+        for param in ['store', 'workspace']:
+            if self._data.get(param, None) is not None and \
+                    not isinstance(self._data[param], str):
+                self._data[param] = self._data[param].object_id
+
 
 class CSVInputManager(FileInputManager):
     namespace = ['transfer', 'input', 'file', 'csv']
+
+
+class WarehouseQueryInputManager(InputDatasetManager):
+    namespace = ['transfer', 'input', 'warehouse_query']
+
+    def pre_create(self, **params):
+        params['store'] = params['store'].object_id
+        params['workspace'] = params['workspace'].object_id
+        return params
+
+    def pre_save(self):
+        for param in ['store', 'workspace']:
+            if self._data.get(param, None) is not None and \
+                    not isinstance(self._data[param], str):
+                self._data[param] = self._data[param].object_id

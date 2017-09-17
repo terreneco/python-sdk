@@ -22,6 +22,10 @@ class BaseAppManager(BaseModelManager):
         params['workspace'] = self.workspace.object_id
         return params
 
+    def pre_save(self, **params):
+        if not isinstance(self.workspace, str):
+            params['workspace'] = params['workspace'].object_id
+
 
 class Workspace(BaseModel):
     def add_owner(self, email):
