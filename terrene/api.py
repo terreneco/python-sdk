@@ -101,7 +101,7 @@ class BaseModelManager(CoreAPIMixin):
 
     def query(self, query_params):
         objs = []
-        for obj in self.act(['list'], query_params).results:
+        for obj in self.act(['list'], query_params)['results']:
             objs.append(self.model(
                 obj['object_id'], self.namespace, self.coreapi))
         return objs
