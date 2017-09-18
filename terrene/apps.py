@@ -48,6 +48,10 @@ class Workspace(BaseModel):
         return self.act(['set_payment_method'], {
             'object_id': self.object_id, 'method': payment_method_object_id})
 
+    def notify(self, subject, content):
+        return self.act(['notify'], {
+            'object_id': self.object_id, 'subject': subject, 'content': content})
+
 
 class WorkspaceManager(BaseModelManager):
     model = Workspace
