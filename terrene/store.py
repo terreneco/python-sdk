@@ -15,7 +15,11 @@ class AbstractWarehouse(BaseApp):
         return pandas.Series(self.act(['read_row'], {
             'object_id': self.object_id, 'table': table, 'key': key}))
 
-    def read_rows(self, table, query=None, select=None):
+    def read_rows(self, *args, **kwargs):
+        table = kwargs['table']
+        query = kwargs.get('query')
+        select = kwargs.get('select')
+
         body = {'object_id': self.object_id, 'table': table}
         if query is not None:
             body['query'] = query
@@ -35,3 +39,21 @@ class AbstractWarehouseManager(BaseAppManager):
 
 class StandardWarehouseManager(AbstractWarehouseManager):
     namespace = ['store', 'azure']
+
+
+class SQLDatabase(AbstractWarehouse):
+    def read_rows(self, query=None):
+        return pandas.DataFrame(self.act(['read_rows'], {
+            'object_id': self.object_id, 'query': query}))
+
+    def read_row(self, table, key):
+        raise NotImplementedError(
+            'SQLDatabase does not support reading a single row. Please use read_rows instead.')
+
+    def test_connection(self):
+        return self.act(['test_connection'], {'object_id': self.object_id})
+
+
+class SQLDatabaseManager(AbstractWarehouseManager):
+    model = SQLDatabase
+    namespace = ['store', 'sql']

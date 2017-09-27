@@ -47,7 +47,7 @@ class WarehouseQueryInputManager(InputDatasetManager):
 
     def pre_create(self, **params):
         params['store'] = params['store'].object_id
-        params['workspace'] = params['workspace'].object_id
+        params['workspace'] = self.workspace.object_id
         return params
 
     def pre_save(self):
