@@ -9,7 +9,7 @@ to get started.
 ### Install From Source
 
 ```
-git clone git@git.terrene.co:General/python-sdk.git
+git clone https://git.terrene.co/open-source/terrene-python-sdk
 cd python-sdk
 cmd/install
 ```
