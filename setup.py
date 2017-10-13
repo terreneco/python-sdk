@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="Terrene",
-    version="0.0.6",
+    version="0.0.7",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
