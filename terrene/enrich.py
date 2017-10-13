@@ -48,11 +48,11 @@ class ModelRuntime:
 
 
 class PredictiveModel(BaseApp):
-    def train(self, dataset, epochs=100, loss=ModelType.regression,
+    def train(self, transfer, epochs=100, loss=ModelType.regression,
               runtime=ModelRuntime.default, optimizer=ModelOptimizer(type='adam')):
         return self.act(['train'], {
             'object_id': self.object_id,
-            'dataset': dataset.object_id,
+            'transfer': transfer.object_id,
             'epochs': epochs,
             'loss': loss,
             'optimizer': json.dumps(optimizer()),

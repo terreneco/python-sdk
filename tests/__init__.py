@@ -43,9 +43,9 @@ class EndToEndTestCases(unittest.TestCase):
         model = predictive_model_manager.create(
             name="my predictive model", description="predictive model",
             input_variables="Sex, Pclass, Fare, Parch, SibSp, Age, Cabin", output_variables="Survived")
-        model.train(dataset=csv_file_input, epochs=100)
+        model.train(transfer=csv_file_input, epochs=100)
         # retrain
-        model.train(dataset=csv_file_input, epochs=500)
+        model.train(transfer=csv_file_input, epochs=500)
 
         model_endpoint_manager = ModelEndpointManager(
             credentials=credentials, workspace=workspace)
@@ -66,6 +66,6 @@ class EndToEndTestCases(unittest.TestCase):
             "Embarked": "S", "SibSp": 0, "Parch": 0,
             "Fare": 14.25, "Cabin": "C30"})
 
-        print(store.read_rows(endpoint.table))
+        print(store.read_rows(table=endpoint.table))
 
         workspace.delete()
