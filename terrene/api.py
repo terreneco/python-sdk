@@ -26,11 +26,13 @@ class BaseModel(CoreAPIMixin):
     _data = {}
     coreapi = None
     namespace = []
+    credentials = None
 
-    def __init__(self, object_id, namespace, coreapi):
+    def __init__(self, object_id, namespace, coreapi, credentials=None):
         self._data['object_id'] = object_id
         self.namespace = namespace
         self.coreapi = coreapi
+        self.credentials = credentials
         self.retrieve()
 
     def pre_retrieve(self):
@@ -103,11 +105,11 @@ class BaseModelManager(CoreAPIMixin):
         objs = []
         for obj in self.act(['list'], query_params)['results']:
             objs.append(self.model(
-                obj['object_id'], self.namespace, self.coreapi))
+                obj['object_id'], self.namespace, self.coreapi, self.credentials))
         return objs
 
     def get(self, object_id):
-        return self.model(object_id, self.namespace, self.coreapi)
+        return self.model(object_id, self.namespace, self.coreapi, self.credentials)
 
     def pre_create(self, **params):
         return params
@@ -116,7 +118,7 @@ class BaseModelManager(CoreAPIMixin):
         params = self.pre_create(**params)
         results = self.model(
             self.act(['create'], params)['object_id'], self.namespace,
-            self.coreapi)
+            self.coreapi, self.credentials)
         return self.post_create(results)
 
     def post_create(self, results):

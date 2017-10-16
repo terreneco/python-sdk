@@ -3,7 +3,7 @@ from .api import BaseModelManager, BaseModel
 
 class BaseApp(BaseModel):
     @property
-    def credentials(self):
+    def connection_credentials(self):
         return self.act(['credentials', 'read'], {'object_id': self.object_id})
 
 
@@ -28,6 +28,35 @@ class BaseAppManager(BaseModelManager):
 
 
 class Workspace(BaseModel):
+
+    predictive_model_manager = None
+    model_endpoint_manager = None
+    standard_warehouse_manager = None
+    sql_database_manager = None
+    csv_input_manager = None
+    warehouse_query_input_manager = None
+
+    def __init__(self, *args, **kwargs):
+        super(Workspace, self).__init__(*args, **kwargs)
+
+        from .enrich import PredictiveModelManager
+        from .serve import ModelEndpointManager
+        from .store import StandardWarehouseManager, SQLDatabaseManager
+        from .transfer import CSVInputManager, WarehouseQueryInputManager
+
+        self.predictive_model_manager = PredictiveModelManager(
+            workspace=self, credentials=self.credentials)
+        self.model_endpoint_manager = ModelEndpointManager(
+            workspace=self, credentials=self.credentials)
+        self.standard_warehouse_manager = StandardWarehouseManager(
+            workspace=self, credentials=self.credentials)
+        self.sql_database_manager = SQLDatabaseManager(
+            workspace=self, credentials=self.credentials)
+        self.csv_input_manager = CSVInputManager(
+            workspace=self, credentials=self.credentials)
+        self.warehouse_query_input_manager = WarehouseQueryInputManager(
+            workspace=self, credentials=self.credentials)
+
     def add_owner(self, email):
         return self.act(['owners', 'create'], {
             'object_id': self.object_id, 'user': email})
