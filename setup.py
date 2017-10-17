@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
 
 
-with open('requires.txt') as f:
-    required = f.read().splitlines()
+try:
+    with open('requirements.txt') as f:
+        required = f.read().splitlines()
+except FileNotFoundError:
+    with open('requires.txt') as f:
+        required = f.read().splitlines()
 
 setup(
     name="Terrene",
