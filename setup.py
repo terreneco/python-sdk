@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
 
-with open('requirements.txt') as f:
+with open('requires.txt') as f:
     required = f.read().splitlines()
 
 setup(
     name="Terrene",
-    version="0.0.8",
+    version="0.0.9",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
