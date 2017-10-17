@@ -5,8 +5,7 @@ try:
     with open('requirements.txt') as f:
         required = f.read().splitlines()
 except FileNotFoundError:
-    with open('requires.txt') as f:
-        required = f.read().splitlines()
+    pass
 
 setup(
     name="Terrene",
