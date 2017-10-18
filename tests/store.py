@@ -22,4 +22,3 @@ class StoreTestCases(unittest.TestCase):
 
         store.delete()
         workspace.delete()
-
