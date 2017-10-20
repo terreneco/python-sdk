@@ -1,6 +1,8 @@
 from .apps import BaseApp, BaseAppManager
 from coreapi.utils import File
 
+import uuid
+
 
 class InputDataset(BaseApp):
     pass
@@ -26,13 +28,12 @@ class FileInputManager(InputDatasetManager):
 
     def pre_create(self, **params):
         params['workspace'] = self.workspace.object_id
-        params['store'] = params['store'].object_id
         params['file'].seek(0)
-        params['file'] = File(params['store'], params['file'].read())
+        params['file'] = File(str(uuid.uuid4()), params['file'].read())
         return params
 
     def pre_save(self):
-        for param in ['store', 'workspace']:
+        for param in ['workspace']:
             if self._data.get(param, None) is not None and \
                     not isinstance(self._data[param], str):
                 self._data[param] = self._data[param].object_id

@@ -35,7 +35,7 @@ class EndToEndTestCases(unittest.TestCase):
         with open('tests/dist/train.csv', 'r') as input_file:
             csv_file_input = csv_input_manager.create(
                 name="my file", description="training dataset",
-                file=input_file, store=store, container="training")
+                file=input_file)
 
         predictive_model_manager = PredictiveModelManager(
             credentials=credentials, workspace=workspace)
