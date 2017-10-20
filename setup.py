@@ -10,7 +10,7 @@ except FileNotFoundError:
 
 setup(
     name="Terrene",
-    version="0.0.12",
+    version="0.0.13",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
