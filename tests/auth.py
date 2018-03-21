@@ -6,14 +6,14 @@ class CredentialsTestCases(unittest.TestCase):
         import os
         from terrene.auth import EmailPasswordCredentials
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
 
     def test_bad_credentials(self):
         from terrene.auth import EmailPasswordCredentials
         import coreapi
         try:
-            credentials = EmailPasswordCredentials(
+            EmailPasswordCredentials(
                 email='random@random.com', password='bad_password')
             raise AssertionError('bad credentials should not work')
         except coreapi.exceptions.ErrorMessage:
@@ -26,21 +26,20 @@ class UserTestCases(unittest.TestCase):
         from terrene.auth import EmailPasswordCredentials
         from terrene.auth import UserManager
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        user_manager = UserManager(credentials=credentials)
+        user_manager = UserManager()
 
         assert user_manager.current_user is not None
 
     def test_user_profile_changes(self):
-
         import os
         from terrene.auth import EmailPasswordCredentials
         from terrene.auth import UserManager
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        user_manager = UserManager(credentials=credentials)
+        user_manager = UserManager()
         user = user_manager.current_user
 
         original_first_name = user.first_name

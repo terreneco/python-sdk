@@ -8,10 +8,10 @@ class TransferTestCases(unittest.TestCase):
         from terrene.apps import WorkspaceManager
         from terrene.transfer import FileInputManager, DataParserManager
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
 
-        workspace_manager = WorkspaceManager(credentials=credentials)
+        workspace_manager = WorkspaceManager()
 
         # workspaces = workspace_manager.query({})
         # for workspace in workspaces:
@@ -20,10 +20,9 @@ class TransferTestCases(unittest.TestCase):
         workspace = workspace_manager.create(
             name="My Workspace", description="A workspace for Terrene's tutorial")
 
-        file_input_manager = FileInputManager(
-            credentials=credentials, workspace=workspace)
+        file_input_manager = FileInputManager(workspace=workspace)
         with open('tests/dist/train.csv', 'r') as input_file:
-            data_parser_manager = DataParserManager(credentials=credentials, filename=input_file.name)
+            data_parser_manager = DataParserManager(filename=input_file.name)
             csv_file_input = file_input_manager.create(
                 name="my file", description="training dataset", parser=data_parser_manager.set_default_parser(),
                 workspace=workspace.object_id, file=input_file)

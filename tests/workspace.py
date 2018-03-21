@@ -8,10 +8,10 @@ class WorkspaceTestCases(unittest.TestCase):
         from terrene.auth import EmailPasswordCredentials
         from terrene.apps import WorkspaceManager
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
 
-        workspace_manager = WorkspaceManager(credentials=credentials)
+        workspace_manager = WorkspaceManager()
         workspace = workspace_manager.create(
             name="My Workspace", description="A workspace for Terrene's tutorial")
 

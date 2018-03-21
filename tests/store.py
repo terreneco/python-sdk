@@ -8,15 +8,15 @@ class StoreTestCases(unittest.TestCase):
         from terrene.apps import WorkspaceManager
         from terrene.store import StandardWarehouseManager
 
-        credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
 
-        workspace_manager = WorkspaceManager(credentials=credentials)
+        workspace_manager = WorkspaceManager()
         workspace = workspace_manager.create(
             name="My Workspace", description="A workspace for Terrene's tutorial")
 
         standard_warehouse_manager = StandardWarehouseManager(
-            workspace=workspace, credentials=credentials)
+            workspace=workspace)
         store = standard_warehouse_manager.create(
             name="default storage", description="default warehouse for my workspace")
 
