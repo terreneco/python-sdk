@@ -45,6 +45,7 @@ class FileInputManager(InputDatasetManager):
 
 class DataParserManager(BaseModelManager):
     namespace = ['transfer', 'parsers']
+    filename = ''
 
     CSVParser = None
     JSONParser = None
@@ -52,6 +53,7 @@ class DataParserManager(BaseModelManager):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.filename = kwargs['filename']
         parsers = self.query({})
 
         parser_map = {'CSV Parser': 'CSVParser', 'HTML Parser': 'HTMLParser', 'JSON Parser': 'JSONParser'}
@@ -60,6 +62,17 @@ class DataParserManager(BaseModelManager):
                 setattr(self, parser_map[parser.name], parser)
             except KeyError:
                 pass
+
+    def set_default_parser(self):
+        if self.filename.endswith('.csv'):
+            return self.CSVParser
+        elif self.filename.endswith('.json'):
+            return self.JSONParser
+        elif self.filename.endswith('.html'):
+            return self.HTMLParser
+        else:
+            print('No default parser selected for this file type')
+            return None
 
 
 class WarehouseQueryInputManager(InputDatasetManager):
