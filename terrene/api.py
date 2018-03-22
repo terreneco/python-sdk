@@ -98,9 +98,10 @@ class BaseModelManager(BaseConnector):
     namespace = []
 
     def __init__(self, *args, **kwargs):
-        if BaseConnector.coreapi is None:
-            print('Will use unauthenicated client')
-            BaseConnector.coreapi = coreapi.Client()
+        if self.coreapi is None:
+            print(
+                'Please authenticate your account first. Will proceed by using unauthenicated client. Error may occur')
+            self.coreapi = coreapi.Client()
 
     def query(self, query_params):
         objs = []
@@ -124,5 +125,3 @@ class BaseModelManager(BaseConnector):
 
     def post_create(self, results):
         return results
-
-
