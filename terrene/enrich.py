@@ -3,7 +3,6 @@ from coreapi.utils import File
 import json
 
 
-
 class ModelOptimizer:
     keys = []
 

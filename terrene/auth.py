@@ -1,4 +1,4 @@
-from .api import CoreAPI, CoreAPIMixin, BaseModel, BaseModelManager
+from .api import CoreAPI, CoreAPIMixin, BaseModel, BaseModelManager, BaseConnector
 from .config import api
 import coreapi
 
@@ -25,42 +25,40 @@ class User(BaseModel):
 class UserManager(BaseModelManager):
     model = User
     namespace = ['users']
+    credentials = None
 
     @property
     def current_user(self):
-        return self.credentials.current_user
+        return BaseConnector.current_user
 
     def create(self, params):
         # update the coreapi attribute and credentials attribute to
         # authenticate the newly created user
         user = self.act(['create'], params)
-        self.credentials = EmailPasswordCredentials(
+        EmailPasswordCredentials(
             email=params['email'], password=params['password'])
-        self.coreapi = self.credentials.coreapi
         return self.model(
             user['object_id'], self.namespace, self.coreapi)
 
 
-class BaseCredentials(CoreAPIMixin):
+class BaseCredentials(BaseConnector):
     headers = {}
-    coreapi = None
     namespace = ['users', 'actions', 'login']
-    current_user = None
 
     def __init__(self, *args, **kwargs):
-        self.coreapi = CoreAPI()
+        BaseConnector.coreapi = CoreAPI()
         object_id = self._authenticate(*args, **kwargs)
 
         # attempt to update the coreapi document, and client with the authenticated
         # headers created by the _authenticate method
-        self.coreapi.client = coreapi.Client(
+        BaseConnector.coreapi.client = coreapi.Client(
             transports=[coreapi.transports.HTTPTransport(
                 headers=self.headers)])
-        self.coreapi.document = self.coreapi.client.get(api() + '/schema/')
+        BaseConnector.coreapi.document = BaseConnector.coreapi.client.get(api() + '/schema/')
 
         # retrieve current_user
         if object_id is not None:
-            self.current_user = User(object_id, UserManager.namespace, self.coreapi)
+            BaseConnector.current_user = User(object_id, UserManager.namespace, BaseConnector.coreapi)
 
     def _authenticate(self, *args, **kwargs):
         raise NotImplementedError()

@@ -85,31 +85,33 @@ class BaseModel(CoreAPIMixin):
         return pp(self._data, output=False)
 
 
-class BaseModelManager(CoreAPIMixin):
-    # public attributes
+class BaseConnector(CoreAPIMixin):
+    # This class connects the BaseModelManger and the BaseCredentials together
+    # Users will first authenticate their account first and then will be able to use authenticated client
     coreapi = None
-    credentials = None
+    current_user = None
+
+
+class BaseModelManager(BaseConnector):
+    # public attributes
     model = BaseModel
     namespace = []
 
     def __init__(self, *args, **kwargs):
-        self.credentials = kwargs.pop('credentials', None)
-
-        # retrieve the authenticated coreapi schema
-        if self.credentials is not None:
-            self.coreapi = self.credentials.coreapi
-        else:
-            self.coreapi = CoreAPI()
+        if self.coreapi is None:
+            print(
+                'Please authenticate your account first. Will proceed by using unauthenicated client. Error may occur')
+            self.coreapi = coreapi.Client()
 
     def query(self, query_params):
         objs = []
         for obj in self.act(['list'], query_params)['results']:
             objs.append(self.model(
-                obj['object_id'], self.namespace, self.coreapi, self.credentials))
+                obj['object_id'], self.namespace, self.coreapi))
         return objs
 
     def get(self, object_id):
-        return self.model(object_id, self.namespace, self.coreapi, self.credentials)
+        return self.model(object_id, self.namespace, self.coreapi)
 
     def pre_create(self, **params):
         return params
@@ -118,7 +120,7 @@ class BaseModelManager(CoreAPIMixin):
         params = self.pre_create(**params)
         results = self.model(
             self.act(['create'], params)['object_id'], self.namespace,
-            self.coreapi, self.credentials)
+            self.coreapi)
         return self.post_create(results)
 
     def post_create(self, results):

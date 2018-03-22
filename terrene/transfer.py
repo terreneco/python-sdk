@@ -1,7 +1,9 @@
 from .apps import BaseApp, BaseAppManager
+from .api import BaseModelManager
 from coreapi.utils import File
 
 import uuid
+import json
 
 
 class InputDataset(BaseApp):
@@ -23,24 +25,54 @@ class FileInput(InputDataset):
 
 class FileInputManager(InputDatasetManager):
     model = FileInput
-    namespace = ['transfer', 'input', 'file', 'all']
+    namespace = ['transfer', 'input', 'file']
     _file = None
 
     def pre_create(self, **params):
         params['workspace'] = self.workspace.object_id
+        params['parser'] = params['parser'].object_id
         params['file'].seek(0)
         params['file'] = File(str(uuid.uuid4()), params['file'].read())
+
         return params
 
     def pre_save(self):
-        for param in ['workspace']:
+        for param in ['workspace', 'parser']:
             if self._data.get(param, None) is not None and \
                     not isinstance(self._data[param], str):
                 self._data[param] = self._data[param].object_id
 
 
-class CSVInputManager(FileInputManager):
-    namespace = ['transfer', 'input', 'file', 'csv']
+class DataParserManager(BaseModelManager):
+    namespace = ['transfer', 'parsers']
+    filename = ''
+
+    CSVParser = None
+    JSONParser = None
+    HTMLParser = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filename = kwargs['filename']
+        parsers = self.query({})
+
+        parser_map = {'CSV Parser': 'CSVParser', 'HTML Parser': 'HTMLParser', 'JSON Parser': 'JSONParser'}
+        for parser in parsers:
+            try:
+                setattr(self, parser_map[parser.name], parser)
+            except KeyError:
+                pass
+
+    def set_default_parser(self):
+        if self.filename.endswith('.csv'):
+            return self.CSVParser
+        elif self.filename.endswith('.json'):
+            return self.JSONParser
+        elif self.filename.endswith('.html'):
+            return self.HTMLParser
+        else:
+            print('No default parser selected for this file type')
+            return None
 
 
 class WarehouseQueryInputManager(InputDatasetManager):

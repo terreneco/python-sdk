@@ -42,7 +42,7 @@ class Workspace(BaseModel):
         from .enrich import PredictiveModelManager
         from .serve import ModelEndpointManager
         from .store import StandardWarehouseManager, SQLDatabaseManager
-        from .transfer import CSVInputManager, WarehouseQueryInputManager
+        from .transfer import FileInputManager, WarehouseQueryInputManager
 
         self.predictive_model_manager = PredictiveModelManager(
             workspace=self, credentials=self.credentials)
@@ -52,7 +52,7 @@ class Workspace(BaseModel):
             workspace=self, credentials=self.credentials)
         self.sql_database_manager = SQLDatabaseManager(
             workspace=self, credentials=self.credentials)
-        self.csv_input_manager = CSVInputManager(
+        self.file_input_manager = FileInputManager(
             workspace=self, credentials=self.credentials)
         self.warehouse_query_input_manager = WarehouseQueryInputManager(
             workspace=self, credentials=self.credentials)
