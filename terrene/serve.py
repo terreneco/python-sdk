@@ -16,6 +16,15 @@ class ModelEndpoint(BaseApp):
         else:
             raise ValueError("Both params and file can not be None")
 
+    def batch_predict(self, file, parser):
+        if file is not None and parser is not None:
+            return self.act(['predict', 'create'], {
+                'object_id': self.object_id,
+                'input_file': File(str(uuid.uuid4()), file.read()),
+                'input_file_parser': parser})
+        else:
+            raise FileNotFoundError('File or parser was not provided')
+
     def pre_save(self):
         for param in ['enrich', 'store', 'workspace']:
             if self._data.get(param, None) is not None and \

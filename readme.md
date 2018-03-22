@@ -31,15 +31,26 @@ To update to the latest version run the following command:
 cmd/update
 ```
 
-### Environmental Variables
 
-- API_PROTOCOL `default: https`
-- API_HOST `default: api.terrene.co`
-- API_PORT `default: 44s`
-- PORTAL_PROTOCOL `default: https`
-- PORTAL_HOST `default: portal.terrene.co`
-- PORTAL_PORT `default: 443`
+## Authentication
 
+To authenticate your api client, first set email and password environment variables:
+
+```bash
+export EMAIL=<your_email>; 
+export PASSWORD=<your_password>;
+```
+
+Then use EmailPasswordCredentials to enable access to your account:
+
+```
+EmailPasswordCredentials(
+    email=os.environ.get('EMAIL'), 
+        password=os.environ.get('PASSWORD'))
+```
+
+Note, you only need to authenticate with this method once. All the other SDK methods will use automatically 
+use your authenticated credentials
 
 ## License
 

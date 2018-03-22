@@ -6,7 +6,7 @@ class TransferTestCases(unittest.TestCase):
         import os
         from terrene.auth import EmailPasswordCredentials
         from terrene.apps import WorkspaceManager
-        from terrene.transfer import FileInputManager, DataParserManager
+        from terrene.transfer import FileInputManager, DataParserManager, FileOutputManager
 
         EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
@@ -26,6 +26,8 @@ class TransferTestCases(unittest.TestCase):
             csv_file_input = file_input_manager.create(
                 name="my file", description="training dataset", parser=data_parser_manager.set_default_parser(),
                 workspace=workspace.object_id, file=input_file)
+
+        FileOutputManager().save_all_content()
 
         csv_file_input.delete()
         workspace.delete()

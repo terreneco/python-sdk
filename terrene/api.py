@@ -87,21 +87,21 @@ class BaseModel(CoreAPIMixin):
 
 class BaseConnector(CoreAPIMixin):
     # This class connects the BaseModelManger and the BaseCredentials together
-    # Users will first authenticate their account first and then will be able to use authenticated client
+    # If user does not authenticate first, the coreapi will be defaulted to unauthenticated client.
+    # User will then be limited to certain API calls
     coreapi = None
     current_user = None
+
+    def __init__(self):
+        if self.coreapi is None:
+            print('Using unauthenticated client')
+            self.coreapi = coreapi.Client()
 
 
 class BaseModelManager(BaseConnector):
     # public attributes
     model = BaseModel
     namespace = []
-
-    def __init__(self, *args, **kwargs):
-        if self.coreapi is None:
-            print(
-                'Please authenticate your account first. Will proceed by using unauthenicated client. Error may occur')
-            self.coreapi = coreapi.Client()
 
     def query(self, query_params):
         objs = []

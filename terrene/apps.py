@@ -12,7 +12,6 @@ class BaseAppManager(BaseModelManager):
     namespace = ['apps']
 
     def __init__(self, *args, **kwargs):
-        super(BaseAppManager, self).__init__(*args, **kwargs)
         self.workspace = kwargs.pop('workspace', None)
 
         if self.workspace is None:
