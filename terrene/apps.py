@@ -95,6 +95,8 @@ class WorkspaceManager(BaseModelManager):
 
         if access_key is not None:
             TokenCredential()
-        elif email is not None or password is not None:
+        elif email is not None and password is not None:
             EmailPasswordCredentials(email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
+        else:
+            print('Please authenticate before interacting with API')
 

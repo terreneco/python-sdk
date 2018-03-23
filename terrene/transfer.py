@@ -49,23 +49,22 @@ class FileInputManager(InputDatasetManager):
 
 
 class FileOutput(BaseApp):
-    def save_content(self, path):
+    def view_batch_preds(self):
+        return self.query({})
+
+    def save_content(self, path, output_file):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(obj_id),
+        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(output_file.object_id),
                                headers=self.headers).content
         dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
-        dataframe.to_csv(path + obj_id + '.csv')
+        dataframe.to_csv(path + output_file.object_id + '.csv')
 
 
 class FileOutputManager(BaseAppManager):
     model = FileOutput
     namespace = ['transfer', 'output', 'file']
-    batch_preds = []
-
-    def __init__(self):
-        self.batch_preds = self.query({})
 
 
 class DataParserManager(BaseModelManager):
