@@ -56,7 +56,7 @@ class FileOutputManager(BaseModelManager):
 
     def save_all_content(self):
         for pred in self.batch_preds:
-            content = self.act([pred.object_id, 'raw'], params=None).content  # namespace is invalid, but it's not
+            content = self.act([pred.object_id, 'raw'], params=None) # namespace is invalid, but it's not
             dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
             dataframe.to_csv(self.path + pred.object_id + '.csv')
 

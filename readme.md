@@ -34,14 +34,16 @@ cmd/update
 
 ## Authentication
 
-To authenticate your api client, first set email and password environment variables:
+There are two methods to authenticating your account with the coreapi client.
+
+Option 1:
 
 ```bash
 export EMAIL=<your_email>; 
 export PASSWORD=<your_password>;
 ```
 
-Then use EmailPasswordCredentials to enable access to your account:
+Then in your python file, use EmailPasswordCredentials() to enable access to your account:
 
 ```
 EmailPasswordCredentials(
@@ -49,7 +51,22 @@ EmailPasswordCredentials(
         password=os.environ.get('PASSWORD'))
 ```
 
-Note, you only need to authenticate with this method once. All the other SDK methods will use automatically 
+
+Option 2:
+
+Go to terrene/__init__.py and enter JWT token
+
+```
+JWT =<your_token>
+```
+
+Then use TokenCredential to enable access to your account:
+
+```
+TokenCredential()
+```
+
+Note: you only need to authenticate with this method once. All the prior SDK methods will use automatically 
 use your authenticated credentials
 
 ## License

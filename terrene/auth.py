@@ -1,6 +1,9 @@
 from .api import CoreAPI, CoreAPIMixin, BaseModel, BaseModelManager, BaseConnector
 from .config import api
+from . import JWT
+
 import coreapi
+import os
 
 
 class User(BaseModel):
@@ -74,15 +77,22 @@ class EmailPasswordCredentials(BaseCredentials):
         results = self.act(['obtain_token'], {
             'email': kwargs.get('email'), 'password': kwargs.get('password')})
         self.headers['Authorization'] = 'JWT {}'.format(results['token'])
+        print('Account verified through email and password')
         return results['user']['object_id']
 
 
 class TokenCredential(BaseCredentials):
     def _authenticate(self, *args, **kwargs):
-        if kwargs.get('token', None) is None:
+        if JWT is not None:
+            results = self.act(['verify_token'], {
+                'token': JWT})
+            self.headers['Authorization'] = 'JWT {}'.format(results['token'])
+            print('Account verified through JWT')
+        elif 'token' in kwargs:
+            results = self.act(['verify_token'], {
+                'token': kwargs.get('token')})
+            self.headers['Authorization'] = 'JWT {}'.format(results['token'])
+        else:
             raise AssertionError(
                 "token kwarg is required for all the TokenCredential instances.")
-        results = self.act(['verify_token'], {
-            'token': kwargs.get('token')})
-        self.headers['Authorization'] = 'JWT {}'.format(results['token'])
         return None
