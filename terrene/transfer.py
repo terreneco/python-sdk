@@ -1,11 +1,14 @@
 from .apps import BaseApp, BaseAppManager
 from .api import BaseModelManager
+from .config import api
 from coreapi.utils import File
 
 import uuid
 import json
 import pandas
 import io
+import requests
+import os
 
 
 class InputDataset(BaseApp):
@@ -47,21 +50,25 @@ class FileInputManager(InputDatasetManager):
 
 class FileOutputManager(BaseModelManager):
     namespace = ['transfer', 'output', 'file']
-    path = 'outputs/'
+    path = './batch-outputs/'
     batch_preds = []
 
     def __init__(self):
         self.batch_preds = self.query({})
-        print(self.batch_preds)
+
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
 
     def save_all_content(self):
         for pred in self.batch_preds:
-            content = self.act([pred.object_id, 'raw'], params=None) # namespace is invalid, but it's not
+            content = requests.get(api() + '/transfer/output/file/{}/raw'.format(pred.object_id),
+                                   headers=self.headers).content
             dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
             dataframe.to_csv(self.path + pred.object_id + '.csv')
 
     def save_single_content(self, obj_id):
-        content = self.act([obj_id, 'raw'], params=None).content  # namespace is invalid, but it's not
+        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(obj_id),
+                               headers=self.headers).content
         dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
         dataframe.to_csv(self.path + obj_id + '.csv')
 
@@ -110,4 +117,3 @@ class WarehouseQueryInputManager(InputDatasetManager):
             if self._data.get(param, None) is not None and \
                     not isinstance(self._data[param], str):
                 self._data[param] = self._data[param].object_id
-

@@ -28,7 +28,7 @@ class TransferTestCases(unittest.TestCase):
                 name="my file", description="training dataset", parser=data_parser_manager.set_default_parser(),
                 workspace=workspace.object_id, file=input_file)
 
-        # FileOutputManager().save_all_content()
+        FileOutputManager().save_all_content()
 
         csv_file_input.delete()
         workspace.delete()

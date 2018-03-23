@@ -90,7 +90,9 @@ class BaseConnector(CoreAPIMixin):
     # If user does not authenticate first, the coreapi will be defaulted to unauthenticated client.
     # User will then be limited to certain API calls
     coreapi = None
+
     current_user = None
+    headers = {}
 
     def __init__(self):
         if self.coreapi is None:

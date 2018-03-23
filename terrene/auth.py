@@ -45,7 +45,6 @@ class UserManager(BaseModelManager):
 
 
 class BaseCredentials(BaseConnector):
-    headers = {}
     namespace = ['users', 'actions', 'login']
 
     def __init__(self, *args, **kwargs):
