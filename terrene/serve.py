@@ -17,7 +17,7 @@ class ModelEndpoint(BaseApp):
             raise ValueError("Both params and file can not be None")
 
     def batch_predict(self, file, parser):
-        if file is not None and parser is not None:
+        if file and parser is not None:
             return self.act(['predict', 'create'], {
                 'object_id': self.object_id,
                 'input_file': File(str(uuid.uuid4()), file.read()),

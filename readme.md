@@ -43,30 +43,17 @@ export EMAIL=<your_email>;
 export PASSWORD=<your_password>;
 ```
 
-Then in your python file, use EmailPasswordCredentials() to enable access to your account:
-
-```
-EmailPasswordCredentials(
-    email=os.environ.get('EMAIL'), 
-        password=os.environ.get('PASSWORD'))
-```
-
-
 Option 2:
 
-Go to terrene/__init__.py and enter JWT token
+Go to terrene/__init__.py and enter access key
 
 ```
-JWT =<your_token>
+access_key = <your_token>
 ```
 
-Then use TokenCredential to enable access to your account:
+Then, when you create a workspace using WorkspaceManager(), it will automatically authenticate your coreapi client
 
-```
-TokenCredential()
-```
-
-Note: you only need to authenticate with this method once. All the prior SDK methods will use automatically 
+Note: Once you have authenticated once, all the prior SDK methods will use automatically 
 use your authenticated credentials
 
 ## License

@@ -1,4 +1,8 @@
 from .api import BaseModelManager, BaseModel
+from . import access_key
+from .auth import TokenCredential, EmailPasswordCredentials
+
+import os
 
 
 class BaseApp(BaseModel):
@@ -84,3 +88,13 @@ class Workspace(BaseModel):
 class WorkspaceManager(BaseModelManager):
     model = Workspace
     namespace = ['workspaces']
+
+    def __init__(self):
+        email = os.environ.get('EMAIL')
+        password = os.environ.get('PASSWORD')
+
+        if access_key is not None:
+            TokenCredential()
+        elif email is not None or password is not None:
+            EmailPasswordCredentials(email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
+

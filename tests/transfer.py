@@ -4,13 +4,8 @@ import unittest
 class TransferTestCases(unittest.TestCase):
     def test_csv_dataset_creation_and_deletion(self):
         import os
-        from terrene.auth import EmailPasswordCredentials, TokenCredential
         from terrene.apps import WorkspaceManager
         from terrene.transfer import FileInputManager, DataParserManager, FileOutputManager
-
-        # EmailPasswordCredentials(
-        #     email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        TokenCredential()
 
         workspace_manager = WorkspaceManager()
 

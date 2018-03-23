@@ -1,5 +1,5 @@
 from .apps import BaseApp, BaseAppManager
-from .api import BaseModelManager
+from .api import BaseModelManager, BaseModel
 from .config import api
 from coreapi.utils import File
 
@@ -48,29 +48,24 @@ class FileInputManager(InputDatasetManager):
                 self._data[param] = self._data[param].object_id
 
 
-class FileOutputManager(BaseModelManager):
+class FileOutput(BaseApp):
+    def save_content(self, path):
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(obj_id),
+                               headers=self.headers).content
+        dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
+        dataframe.to_csv(path + obj_id + '.csv')
+
+
+class FileOutputManager(BaseAppManager):
+    model = FileOutput
     namespace = ['transfer', 'output', 'file']
-    path = './batch-outputs/'
     batch_preds = []
 
     def __init__(self):
         self.batch_preds = self.query({})
-
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
-
-    def save_all_content(self):
-        for pred in self.batch_preds:
-            content = requests.get(api() + '/transfer/output/file/{}/raw'.format(pred.object_id),
-                                   headers=self.headers).content
-            dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
-            dataframe.to_csv(self.path + pred.object_id + '.csv')
-
-    def save_single_content(self, obj_id):
-        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(obj_id),
-                               headers=self.headers).content
-        dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
-        dataframe.to_csv(self.path + obj_id + '.csv')
 
 
 class DataParserManager(BaseModelManager):
