@@ -1,8 +1,4 @@
 from .api import BaseModelManager, BaseModel
-from . import access_key
-from .auth import TokenCredential, EmailPasswordCredentials
-
-import os
 
 
 class BaseApp(BaseModel):
@@ -16,6 +12,7 @@ class BaseAppManager(BaseModelManager):
     namespace = ['apps']
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.workspace = kwargs.pop('workspace', None)
 
         if self.workspace is None:
@@ -29,29 +26,33 @@ class BaseAppManager(BaseModelManager):
         if not isinstance(self.workspace, str):
             params['workspace'] = params['workspace'].object_id
 
+    def query(self, query_params):
+        query_params = {**query_params, **{
+            'workspace__object_id': self.workspace.object_id}}
+        return super().query(query_params)
+
 
 class Workspace(BaseModel):
-
     predictive_model_manager = None
     model_endpoint_manager = None
-    standard_warehouse_manager = None
     sql_database_manager = None
-    csv_input_manager = None
+    file_input_manager = None
+    file_output_manager = None
     warehouse_query_input_manager = None
+    data_parser_manager = None
 
     def __init__(self, *args, **kwargs):
         super(Workspace, self).__init__(*args, **kwargs)
 
         from .enrich import PredictiveModelManager
         from .serve import ModelEndpointManager
-        from .store import StandardWarehouseManager, SQLDatabaseManager
-        from .transfer import FileInputManager, WarehouseQueryInputManager
+        from .store import SQLDatabaseManager
+        from .transfer import FileInputManager, WarehouseQueryInputManager,\
+            FileOutputManager, DataParserManager
 
         self.predictive_model_manager = PredictiveModelManager(
             workspace=self, credentials=self.credentials)
         self.model_endpoint_manager = ModelEndpointManager(
-            workspace=self, credentials=self.credentials)
-        self.standard_warehouse_manager = StandardWarehouseManager(
             workspace=self, credentials=self.credentials)
         self.sql_database_manager = SQLDatabaseManager(
             workspace=self, credentials=self.credentials)
@@ -59,6 +60,10 @@ class Workspace(BaseModel):
             workspace=self, credentials=self.credentials)
         self.warehouse_query_input_manager = WarehouseQueryInputManager(
             workspace=self, credentials=self.credentials)
+        self.file_output_manager = FileOutputManager(
+            workspace=self, credentials=self.credentials)
+        self.data_parser_manager = DataParserManager(
+            credentials=self.credentials)
 
     def add_owner(self, email):
         return self.act(['owners', 'create'], {
@@ -88,15 +93,3 @@ class Workspace(BaseModel):
 class WorkspaceManager(BaseModelManager):
     model = Workspace
     namespace = ['workspaces']
-
-    def __init__(self):
-        email = os.environ.get('EMAIL')
-        password = os.environ.get('PASSWORD')
-
-        if access_key is not None:
-            TokenCredential()
-        elif email is not None and password is not None:
-            EmailPasswordCredentials(email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        else:
-            print('Please authenticate before interacting with API')
-
