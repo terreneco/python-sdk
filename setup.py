@@ -10,7 +10,7 @@ except FileNotFoundError:
 
 setup(
     name="Terrene",
-    version="0.0.13",
+    version="1.0.0",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
@@ -20,7 +20,7 @@ setup(
     packages=find_packages(exclude=["test"]),
     install_requires=required,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - Beta',
 
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
