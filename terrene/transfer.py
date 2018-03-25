@@ -15,7 +15,7 @@ class InputDataset(BaseApp):
     pass
 
 
-class InputDatasetManager(BaseAppManager):
+class AbstractInputPipeManager(BaseAppManager):
     model = InputDataset
     namespace = ['transfer', 'input', 'all']
 
@@ -28,10 +28,9 @@ class FileInput(InputDataset):
             'file': File(self.object_id, file.read())})
 
 
-class FileInputManager(InputDatasetManager):
+class FileInputManager(AbstractInputPipeManager):
     model = FileInput
     namespace = ['transfer', 'input', 'file']
-    _file = None
 
     def pre_create(self, **params):
         params['workspace'] = self.workspace.object_id
@@ -49,9 +48,6 @@ class FileInputManager(InputDatasetManager):
 
 
 class FileOutput(BaseApp):
-    def view_batch_preds(self):
-        return self.query({})
-
     def save_content(self, path, output_file):
         if not os.path.exists(path):
             os.makedirs(path)
@@ -69,14 +65,13 @@ class FileOutputManager(BaseAppManager):
 
 class DataParserManager(BaseModelManager):
     namespace = ['transfer', 'parsers']
-    filename = ''
 
     CSVParser = None
     JSONParser = None
     HTMLParser = None
 
-    def __init__(self, **kwargs):
-        self.filename = kwargs['filename']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         parsers = self.query({})
 
         parser_map = {'CSV Parser': 'CSVParser', 'HTML Parser': 'HTMLParser', 'JSON Parser': 'JSONParser'}
@@ -86,19 +81,8 @@ class DataParserManager(BaseModelManager):
             except KeyError:
                 pass
 
-    def set_default_parser(self):
-        if self.filename.endswith('.csv'):
-            return self.CSVParser
-        elif self.filename.endswith('.json'):
-            return self.JSONParser
-        elif self.filename.endswith('.html'):
-            return self.HTMLParser
-        else:
-            print('No default parser selected for this file type')
-            return None
 
-
-class WarehouseQueryInputManager(InputDatasetManager):
+class WarehouseQueryInputManager(AbstractInputPipeManager):
     namespace = ['transfer', 'input', 'warehouse_query']
 
     def pre_create(self, **params):
