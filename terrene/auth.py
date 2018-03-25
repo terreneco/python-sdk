@@ -1,9 +1,7 @@
-from .api import CoreAPI, CoreAPIMixin, BaseModel, BaseModelManager, BaseConnector
+from .api import CoreAPI, CoreAPIMixin, BaseModel, BaseModelManager
 from .config import api
-from . import access_key
 
 import coreapi
-import os
 
 
 class User(BaseModel):
@@ -30,10 +28,6 @@ class UserManager(BaseModelManager):
     namespace = ['users']
     credentials = None
 
-    @property
-    def current_user(self):
-        return BaseConnector.current_user
-
     def create(self, params):
         # update the coreapi attribute and credentials attribute to
         # authenticate the newly created user
@@ -44,23 +38,23 @@ class UserManager(BaseModelManager):
             user['object_id'], self.namespace, self.coreapi)
 
 
-class BaseCredentials(BaseConnector):
+class BaseCredentials(CoreAPIMixin):
     namespace = ['users', 'actions', 'login']
+    headers = {}
 
     def __init__(self, *args, **kwargs):
-        BaseConnector.coreapi = CoreAPI()
+        self.coreapi = CoreAPI()
         object_id = self._authenticate(*args, **kwargs)
 
         # attempt to update the coreapi document, and client with the authenticated
         # headers created by the _authenticate method
-        BaseConnector.coreapi.client = coreapi.Client(
-            transports=[coreapi.transports.HTTPTransport(
-                headers=self.headers)])
-        BaseConnector.coreapi.document = BaseConnector.coreapi.client.get(api() + '/schema/')
+        self.coreapi.client = coreapi.Client(
+            transports=[coreapi.transports.HTTPTransport(headers=self.headers)])
+        self.coreapi.document = self.coreapi.client.get(api() + '/schema/')
 
         # retrieve current_user
         if object_id is not None:
-            BaseConnector.current_user = User(object_id, UserManager.namespace, BaseConnector.coreapi)
+            self.current_user = User(object_id, UserManager.namespace, self.coreapi)
 
     def _authenticate(self, *args, **kwargs):
         raise NotImplementedError()
@@ -76,17 +70,17 @@ class EmailPasswordCredentials(BaseCredentials):
         results = self.act(['obtain_token'], {
             'email': kwargs.get('email'), 'password': kwargs.get('password')})
         self.headers['Authorization'] = 'JWT {}'.format(results['token'])
-        print('Account verified through email and password')
         return results['user']['object_id']
 
 
 class TokenCredential(BaseCredentials):
     def _authenticate(self, *args, **kwargs):
-        if access_key is None:
-            raise AssertionError(
-                "token kwarg is required for all the TokenCredential instances.")
+        for kwarg in ['token']:
+            if kwargs.get(kwarg, None) is None:
+                raise AssertionError(
+                    "{} kwarg is required for all the TokenCredential instances.".format(
+                        kwarg))
         results = self.act(['verify_token'], {
-            'token': access_key})
+            'token': kwargs.get('token')})
         self.headers['Authorization'] = 'JWT {}'.format(results['token'])
-        print('Account verified through JWT')
         return None
