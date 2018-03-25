@@ -125,12 +125,11 @@ class BaseModelManager(CoreAPIMixin):
     def query(self, query_params):
         objs = []
         for obj in self.act(['list'], query_params)['results']:
-            objs.append(self.model(
-                obj['object_id'], self.namespace, self.coreapi))
+            objs.append(self.get(obj['object_id']))
         return objs
 
     def get(self, object_id):
-        return self.model(object_id, self.namespace, self.coreapi, self.headers)
+        return self.model(object_id, self.namespace, self.coreapi, headers=self.headers)
 
     def pre_create(self, **params):
         return params
