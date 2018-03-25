@@ -1,16 +1,19 @@
 from setuptools import setup, find_packages
 
 
-required = []
-try:
-    with open('requirements.txt') as f:
-        required = f.read().splitlines()
-except FileNotFoundError:
-    pass
+required = [
+    'beeprint', 'certifi', 'chardet', 'coreapi',
+    'coreschema', 'h5py', 'idna', 'itypes',
+    'Jinja2', 'MarkupSafe', 'numpy', 'pandas',
+    'pkginfo', 'python-dateutil', 'pytz',
+    'requests', 'requests-toolbelt', 'toolbelt',
+    'six', 'tqdm', 'uritemplate', 'twine', 'urllib3',
+    'urwid', 'uritemplate'
+]
 
 setup(
     name="Terrene",
-    version="1.0.0",
+    version="1.0.1",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
