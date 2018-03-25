@@ -1,14 +1,12 @@
 from .apps import BaseApp, BaseAppManager
-from .api import BaseModelManager, BaseModel
+from .api import BaseModelManager
 from .config import api
 from coreapi.utils import File
 
 import uuid
-import json
 import pandas
 import io
 import requests
-import os
 
 
 class InputDataset(BaseApp):
@@ -48,14 +46,12 @@ class FileInputManager(AbstractInputPipeManager):
 
 
 class FileOutput(BaseApp):
-    def save_content(self, path, output_file):
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        content = requests.get(api() + '/transfer/output/file/{}/raw'.format(output_file.object_id),
-                               headers=self.headers).content
-        dataframe = pandas.read_csv(io.StringIO(content.decode('utf-8')))
-        dataframe.to_csv(path + output_file.object_id + '.csv')
+    def save_content(self, path):
+        content = requests.get(
+            api() + '/transfer/output/file/{}/raw/'.format(self.object_id),
+            headers=self.headers).content
+        pandas.read_csv(io.StringIO(content.decode(
+            'utf-8'))).to_csv(path)
 
 
 class FileOutputManager(BaseAppManager):
