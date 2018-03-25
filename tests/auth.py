@@ -26,9 +26,9 @@ class UserTestCases(unittest.TestCase):
         from terrene.auth import EmailPasswordCredentials
         from terrene.auth import UserManager
 
-        EmailPasswordCredentials(
+        credentials = EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        user_manager = UserManager()
+        user_manager = UserManager(credentials=credentials)
 
         assert user_manager.current_user is not None
 
@@ -37,9 +37,9 @@ class UserTestCases(unittest.TestCase):
         from terrene.auth import EmailPasswordCredentials
         from terrene.auth import UserManager
 
-        EmailPasswordCredentials(
+        credentials = EmailPasswordCredentials(
             email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
-        user_manager = UserManager()
+        user_manager = UserManager(credentials=credentials)
         user = user_manager.current_user
 
         original_first_name = user.first_name

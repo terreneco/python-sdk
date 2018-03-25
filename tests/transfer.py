@@ -3,20 +3,10 @@ import unittest
 
 class TransferTestCases(unittest.TestCase):
     def test_csv_dataset_creation_and_deletion(self):
-        import os
-        from terrene.auth import EmailPasswordCredentials
         from terrene.apps import WorkspaceManager
-        from terrene.transfer import FileInputManager, DataParserManager
-
-        EmailPasswordCredentials(
-            email=os.environ.get('EMAIL'), password=os.environ.get('PASSWORD'))
+        from terrene.transfer import FileInputManager, DataParserManager, FileOutputManager
 
         workspace_manager = WorkspaceManager()
-
-        # workspaces = workspace_manager.query({})
-        # for workspace in workspaces:
-        #     workspace.delete()
-
         workspace = workspace_manager.create(
             name="My Workspace", description="A workspace for Terrene's tutorial")
 
@@ -24,7 +14,8 @@ class TransferTestCases(unittest.TestCase):
         with open('tests/dist/train.csv', 'r') as input_file:
             data_parser_manager = DataParserManager(filename=input_file.name)
             csv_file_input = file_input_manager.create(
-                name="my file", description="training dataset", parser=data_parser_manager.set_default_parser(),
+                name="my file", description="training dataset",
+                parser=data_parser_manager.CSVParser,
                 workspace=workspace.object_id, file=input_file)
 
         csv_file_input.delete()

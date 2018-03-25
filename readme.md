@@ -31,15 +31,25 @@ To update to the latest version run the following command:
 cmd/update
 ```
 
-### Environmental Variables
 
-- API_PROTOCOL `default: https`
-- API_HOST `default: api.terrene.co`
-- API_PORT `default: 44s`
-- PORTAL_PROTOCOL `default: https`
-- PORTAL_HOST `default: portal.terrene.co`
-- PORTAL_PORT `default: 443`
+## Authentication
 
+There are two methods to authenticating your account with the SDK.
+
+Option 1:
+
+```bash
+export EMAIL=<your_email>; 
+export PASSWORD=<your_password>;
+```
+
+Option 2:
+
+```python
+import terrene
+
+terrene.access_token = '<your-token>'
+```
 
 ## License
 

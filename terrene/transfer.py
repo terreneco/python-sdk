@@ -1,16 +1,19 @@
 from .apps import BaseApp, BaseAppManager
 from .api import BaseModelManager
+from .config import api
 from coreapi.utils import File
 
 import uuid
-import json
+import pandas
+import io
+import requests
 
 
 class InputDataset(BaseApp):
     pass
 
 
-class InputDatasetManager(BaseAppManager):
+class AbstractInputPipeManager(BaseAppManager):
     model = InputDataset
     namespace = ['transfer', 'input', 'all']
 
@@ -23,10 +26,9 @@ class FileInput(InputDataset):
             'file': File(self.object_id, file.read())})
 
 
-class FileInputManager(InputDatasetManager):
+class FileInputManager(AbstractInputPipeManager):
     model = FileInput
     namespace = ['transfer', 'input', 'file']
-    _file = None
 
     def pre_create(self, **params):
         params['workspace'] = self.workspace.object_id
@@ -43,9 +45,22 @@ class FileInputManager(InputDatasetManager):
                 self._data[param] = self._data[param].object_id
 
 
+class FileOutput(BaseApp):
+    def save_content(self, path):
+        content = requests.get(
+            api() + '/transfer/output/file/{}/raw/'.format(self.object_id),
+            headers=self.headers).content
+        pandas.read_csv(io.StringIO(content.decode(
+            'utf-8'))).to_csv(path)
+
+
+class FileOutputManager(BaseAppManager):
+    model = FileOutput
+    namespace = ['transfer', 'output', 'file']
+
+
 class DataParserManager(BaseModelManager):
     namespace = ['transfer', 'parsers']
-    filename = ''
 
     CSVParser = None
     JSONParser = None
@@ -53,7 +68,6 @@ class DataParserManager(BaseModelManager):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filename = kwargs['filename']
         parsers = self.query({})
 
         parser_map = {'CSV Parser': 'CSVParser', 'HTML Parser': 'HTMLParser', 'JSON Parser': 'JSONParser'}
@@ -63,19 +77,8 @@ class DataParserManager(BaseModelManager):
             except KeyError:
                 pass
 
-    def set_default_parser(self):
-        if self.filename.endswith('.csv'):
-            return self.CSVParser
-        elif self.filename.endswith('.json'):
-            return self.JSONParser
-        elif self.filename.endswith('.html'):
-            return self.HTMLParser
-        else:
-            print('No default parser selected for this file type')
-            return None
 
-
-class WarehouseQueryInputManager(InputDatasetManager):
+class WarehouseQueryInputManager(AbstractInputPipeManager):
     namespace = ['transfer', 'input', 'warehouse_query']
 
     def pre_create(self, **params):

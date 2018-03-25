@@ -37,10 +37,6 @@ class AbstractWarehouseManager(BaseAppManager):
     model = AbstractWarehouse
 
 
-class StandardWarehouseManager(AbstractWarehouseManager):
-    namespace = ['store', 'azure']
-
-
 class SQLDatabase(AbstractWarehouse):
     def read_rows(self, query=None):
         return pandas.DataFrame(self.act(['read_rows'], {

@@ -1,5 +1,8 @@
 from .config import api
+from . import access_token
+
 import coreapi
+import os
 
 
 class CoreAPI:
@@ -27,12 +30,14 @@ class BaseModel(CoreAPIMixin):
     coreapi = None
     namespace = []
     credentials = None
+    headers = None
 
-    def __init__(self, object_id, namespace, coreapi, credentials=None):
+    def __init__(self, object_id, namespace, coreapi, credentials=None, headers=None):
         self._data['object_id'] = object_id
         self.namespace = namespace
         self.coreapi = coreapi
         self.credentials = credentials
+        self.headers = headers
         self.retrieve()
 
     def pre_retrieve(self):
@@ -85,33 +90,46 @@ class BaseModel(CoreAPIMixin):
         return pp(self._data, output=False)
 
 
-class BaseConnector(CoreAPIMixin):
-    # This class connects the BaseModelManger and the BaseCredentials together
-    # Users will first authenticate their account first and then will be able to use authenticated client
-    coreapi = None
-    current_user = None
-
-
-class BaseModelManager(BaseConnector):
+class BaseModelManager(CoreAPIMixin):
     # public attributes
     model = BaseModel
     namespace = []
 
+    coreapi = None
+
+    current_user = None
+    credentials = None
+    headers = {}
+
     def __init__(self, *args, **kwargs):
         if self.coreapi is None:
-            print(
-                'Please authenticate your account first. Will proceed by using unauthenicated client. Error may occur')
-            self.coreapi = coreapi.Client()
+            self.coreapi = CoreAPI()
+
+        credentials = None
+        if kwargs.get('credentials'):
+            credentials = kwargs.get('credentials')
+        elif access_token is not None:
+            from .auth import TokenCredential
+            credentials = TokenCredential(token=access_token)
+        elif len(os.environ.get('EMAIL', '')) > 0 and\
+                len(os.environ.get('PASSWORD', '')) > 0:
+            from .auth import EmailPasswordCredentials
+            credentials = EmailPasswordCredentials(
+                email=os.environ.get('EMAIL', ''), password=os.environ.get('PASSWORD', ''))
+
+        if credentials:
+            self.coreapi = credentials.coreapi
+            self.headers = credentials.headers
+            self.current_user = credentials.current_user
 
     def query(self, query_params):
         objs = []
         for obj in self.act(['list'], query_params)['results']:
-            objs.append(self.model(
-                obj['object_id'], self.namespace, self.coreapi))
+            objs.append(self.get(obj['object_id']))
         return objs
 
     def get(self, object_id):
-        return self.model(object_id, self.namespace, self.coreapi)
+        return self.model(object_id, self.namespace, self.coreapi, headers=self.headers)
 
     def pre_create(self, **params):
         return params
