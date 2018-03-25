@@ -34,7 +34,7 @@ cmd/update
 
 ## Authentication
 
-There are two methods to authenticating your account with the coreapi client.
+There are two methods to authenticating your account with the SDK.
 
 Option 1:
 
@@ -45,16 +45,11 @@ export PASSWORD=<your_password>;
 
 Option 2:
 
-Go to terrene/__init__.py and enter access key
+```python
+import terrene
 
+terrene.access_token = '<your-token>'
 ```
-access_key = <your_token>
-```
-
-Then, when you create a workspace using WorkspaceManager(), it will automatically authenticate your coreapi client
-
-Note: Once you have authenticated once, all the prior SDK methods will use automatically 
-use your authenticated credentials
 
 ## License
 
