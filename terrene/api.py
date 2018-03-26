@@ -97,7 +97,6 @@ class BaseModelManager(CoreAPIMixin):
 
     coreapi = None
 
-    current_user = None
     credentials = None
     headers = {}
 
