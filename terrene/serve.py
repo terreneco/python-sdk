@@ -10,9 +10,12 @@ import requests
 class ModelEndpoint(BaseApp):
     def predict(self, params=None, file=None, parser=None):
         if params is not None:
-            return requests.post(
+            params = {str(key): str(value) for key, value in params.items()}
+            res = requests.post(
                 api() + '/' + '/'.join(self.namespace) + '/{}/predict/'.format(self.object_id),
-                data=params, headers=self.headers).json()
+                data=json.dumps({'input_json': params}), headers={
+                    **{'Content-Type': 'application/json'}, **self.headers})
+            return res.json()
         elif file is not None and parser is not None:
             return self.act(['predict', 'create'], {
                 'object_id': self.object_id,
