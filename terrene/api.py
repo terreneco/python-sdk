@@ -138,7 +138,7 @@ class BaseModelManager(CoreAPIMixin):
         params = self.pre_create(**params)
         results = self.model(
             self.act(['create'], params)['object_id'], self.namespace,
-            self.coreapi)
+            self.coreapi, headers=self.headers)
         return self.post_create(results)
 
     def post_create(self, results):
