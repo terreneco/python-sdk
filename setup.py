@@ -6,14 +6,13 @@ required = [
     'coreschema', 'h5py', 'idna', 'itypes',
     'Jinja2', 'MarkupSafe', 'numpy', 'pandas',
     'pkginfo', 'python-dateutil', 'pytz',
-    'requests', 'requests-toolbelt', 'toolbelt',
+    'requests', 'urwid', 'uritemplate',
     'six', 'tqdm', 'uritemplate', 'twine', 'urllib3',
-    'urwid', 'uritemplate'
 ]
 
 setup(
     name="Terrene",
-    version="1.0.1",
+    version="1.0.4",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
