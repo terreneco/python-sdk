@@ -41,6 +41,7 @@ class UserManager(BaseModelManager):
 class BaseCredentials(CoreAPIMixin):
     namespace = ['users', 'actions', 'login']
     headers = {}
+    current_user = None
 
     def __init__(self, *args, **kwargs):
         self.coreapi = CoreAPI()
