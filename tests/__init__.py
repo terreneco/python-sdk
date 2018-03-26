@@ -34,10 +34,8 @@ class EndToEndTestCases(unittest.TestCase):
         endpoint = workspace.model_endpoint_manager.create(
             enrich=model, name="my endpoint", description="used to make predictions")
 
-        endpoint.predict({
-            "Pclass": 1, "Age": 24, "Sex": "male",
-            "Embarked": "S", "SibSp": 0, "Parch": 0,
-            "Fare": 14.25, "Cabin": "C30"})
+        time.sleep(10)  # wait until model is available is done
+
         endpoint.predict({
             "Pclass": 1, "Age": 24, "Sex": "male",
             "Embarked": "S", "SibSp": 0, "Parch": 0,
@@ -50,6 +48,7 @@ class EndToEndTestCases(unittest.TestCase):
         endpoint.predict(
             file=open('tests/dist/train.csv', 'r'),
             parser=DataParserManager().CSVParser)
+
         time.sleep(10)  # wait until processing is done
         endpoint_output = workspace.file_output_manager.query({})[0]
         endpoint_output.save_content('tests/dist/output.csv')
