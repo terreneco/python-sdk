@@ -1,26 +1,23 @@
 from setuptools import setup, find_packages
+from pipenv.project import Project
+from pipenv.utils import convert_deps_to_pip
 
-
-required = [
-    'beeprint', 'certifi', 'chardet', 'coreapi',
-    'coreschema', 'h5py', 'idna', 'itypes',
-    'Jinja2', 'MarkupSafe', 'numpy', 'pandas',
-    'pkginfo', 'python-dateutil', 'pytz',
-    'requests', 'urwid', 'uritemplate',
-    'six', 'tqdm', 'uritemplate', 'twine', 'urllib3',
-]
+pfile = Project(chdir=False).parsed_pipfile
+requirements = convert_deps_to_pip(pfile['packages'], r=False)
+test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
 
 setup(
     name="Terrene",
-    version="1.0.4",
+    version="2.0.1",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
     author_email="developers@terrene.co",
     license='MIT',
     keywords="terrene",
-    packages=find_packages(exclude=["test"]),
-    install_requires=required,
+    packages=find_packages(),
+    install_requires=requirements,
+    test_requirements=test_requirements,
     classifiers=[
         'Development Status :: 4 - Beta',
 
