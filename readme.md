@@ -28,7 +28,7 @@ Make sure that you have the following environment variables set:
 
 ## Get Started
 
-```python3
+```python
 from terrene.contrib import Client
 
 client = Client('https://<your-instance>.api.terrene.co')
@@ -37,7 +37,7 @@ client.authenticate_with_email_and_password('<email>', '<password>')
 
 ### Create a Reducer
 
-```python3
+```python
 from terrene.store import BaseReducer
 
 reducer = client.create(BaseReducer, dict(
@@ -52,7 +52,7 @@ print(dataframe, stderr)
 
 ### Create a TFrame
 
-```python3
+```python
 from terrene.store import TFrame
 
 tframe = client.create(TFrame, dict(
@@ -83,7 +83,7 @@ while True:
 
 ### Create a Predictive Model
 
-```python3
+```python
 from terene.model import PredictiveModel
 
 model = client.create(PredictiveModel, dict(
@@ -96,7 +96,7 @@ suggested_trainers = model.suggest(tframe)
 print(suggested_trainers)
 ```
 
-```python3
+```python
 # train model with suggested trainer
 background_job = model.train(tframe, suggested_trainers[0])
 while True:
@@ -106,7 +106,7 @@ while True:
     time.sleep(1)
 ```
 
-```python3
+```python
 # test predictions
 preds = model.predict({'Age': 12, 'Sex': 'male', 'Cabin': 'C30', 'Parch': 1})
 print(preds)
