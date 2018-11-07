@@ -1,8 +1,5 @@
 # Terrene's Python SDK
 
-Please visit [Terrene's python docs](https://docs.terrene.co/?python) 
-to get started.
-
 
 ## Development
 
@@ -19,41 +16,119 @@ cmd/install
 To test the package run the following command:
 
 ```bash
-export EMAIL=<your_email>; export PASSWORD=<your_password>; cmd/test
+python -m unittest terrene/tests.py
 ```
 
+Make sure that you have the following environment variables set:
 
-### Update the package
+- `TERRENE_SDK_TEST_BASE_URL`
+- `TERRENE_SDK_TEST_EMAIL`
+- `TERRENE_SDK_TEST_PASSWORD`
 
-To update to the latest version run the following command:
 
-```bash
-cmd/update
+## Get Started
+
+```python3
+from terrene.contrib import Client
+
+client = Client('https://<your-instance>.api.terrene.co')
+client.authenticate_with_email_and_password('<email>', '<password>')
 ```
 
+### Create a Reducer
 
-## Authentication
+```python3
+from terrene.store import BaseReducer
 
-There are two methods to authenticating your account with the SDK.
+reducer = client.create(BaseReducer, dict(
+    name='CSV Reducer Python SDK',
+    description='CSV Reducer created by the python sdk',
+    code='import pandas\ncontent = pandas.read_csv(content)'))
 
-Option 1:
-
-```bash
-export EMAIL=<your_email>; 
-export PASSWORD=<your_password>;
+# test the reducer run method
+dataframe, stderr = reducer.run(open('dist/titanic.csv'))
+print(dataframe, stderr)
 ```
 
-Option 2:
+### Create a TFrame
 
-```python
-import terrene
+```python3
+from terrene.store import TFrame
 
-terrene.access_token = '<your-token>'
+tframe = client.create(TFrame, dict(
+    name='Titanic dataset tframe',
+    description='some test tframe'))
+
+background_job = tframe.from_reducer(reducer, open('dist/titanic.csv'))
+while True:
+    background_job.sync()
+    if background_job.progress == 100 or background_job.failed:
+        break
+    time.sleep(1)
+
+# print the loaded dataframe
+tframe_df = tframe.download_dataframe()
+
+# modify the tframe and upload it back
+time.sleep(3)
+tframe_df['New_Col'] = 'test'
+background_job = tframe.upload_dataframe(tframe_df)
+while True:
+    background_job.sync()
+    if background_job.progress == 100 or background_job.failed:
+        break
+    time.sleep(1)
+
+```
+
+### Create a Predictive Model
+
+```python3
+from terene.model import PredictiveModel
+
+model = client.create(PredictiveModel, dict(
+    name='Titanic Predictive Model', description='Predictive Model',
+    input_variables=['Age', 'Sex', 'Cabin', 'Parch'],
+    output_variables=['Survived']))
+suggested_trainers = model.suggest(tframe)
+
+# display suggested_trainers
+print(suggested_trainers)
+```
+
+```python3
+# train model with suggested trainer
+background_job = model.train(tframe, suggested_trainers[0])
+while True:
+    background_job.sync()
+    if background_job.progress == 100 or background_job.failed:
+        break
+    time.sleep(1)
+```
+
+```python3
+# test predictions
+preds = model.predict({'Age': 12, 'Sex': 'male', 'Cabin': 'C30', 'Parch': 1})
+print(preds)
+
+# test batch predictions
+time.sleep(2)
+background_job = model.predict_from_tframe(tframe)
+while True:
+    background_job.sync()
+    if background_job.progress == 100 or background_job.failed:
+        break
+    time.sleep(1)
+
+# get the predicted tframe
+time.sleep(2)
+tframe_with_preds = tframe.download_dataframe()
+print(tframe_with_preds)
 ```
 
 ## License
 
-Copyright 2017 Terrene, Inc.
+Copyright 2018 Terrene, Inc.
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
