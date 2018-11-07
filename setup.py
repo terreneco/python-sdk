@@ -1,14 +1,8 @@
 from setuptools import setup, find_packages
-from pipenv.project import Project
-from pipenv.utils import convert_deps_to_pip
-
-pfile = Project(chdir=False).parsed_pipfile
-requirements = convert_deps_to_pip(pfile['packages'], r=False)
-test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
 
 setup(
     name="Terrene",
-    version="2.0.1",
+    version="2.0.2",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
@@ -16,8 +10,8 @@ setup(
     license='MIT',
     keywords="terrene",
     packages=find_packages(),
-    install_requires=requirements,
-    test_requirements=test_requirements,
+    install_requires=['requests', 'pandas', 'numpy'],
+    test_requirements=[],
     classifiers=[
         'Development Status :: 4 - Beta',
 
