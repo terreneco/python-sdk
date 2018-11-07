@@ -126,6 +126,15 @@ tframe_with_preds = tframe.download_dataframe()
 print(tframe_with_preds)
 ```
 
+## Release
+
+To release the package on pypi, install `twine` and do the following:
+
+```bash
+python setup.py sdist
+twine upload --repository pypi dist/*.tar.gz
+```
+
 ## License
 
 Copyright 2018 Terrene, Inc.
