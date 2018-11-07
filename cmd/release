@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-env/bin/python setup.py sdist
-env/bin/twine upload --repository pypi dist/*
