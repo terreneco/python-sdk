@@ -126,6 +126,25 @@ tframe_with_preds = tframe.download_dataframe()
 print(tframe_with_preds)
 ```
 
+### Send Notifications
+
+All resources support sending notifications to users that have read, write, or execute access to them.
+
+To send a warning to a TFrame do the following:
+
+```python
+tframe.warn(subject="Test Warning", content='Lorem ipsum....', target='read')  # target can be 'read', 'write', or 'execute'
+```
+
+To send a general notification do the following:
+
+```python
+tframe.inform(subject="Test Warning", content='Lorem ipsum....', target='read')  # target can be 'read', 'write', or 'execute'
+```
+
+Both warn and inform methods send notifications but `warn` has a higher priority and some users may have disabled
+`info` notifications.
+
 ## Release
 
 To release the package on pypi, install `twine` and do the following:
