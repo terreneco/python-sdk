@@ -69,6 +69,19 @@ class BaseResource(BaseModel):
         'name', 'description', 'tags', 'permissions', 'public', 'tags',
         'access_level', 'read_access', 'write_access', 'execute_access']
 
+    def _notify(self, subject: str, content: str, target: str, severity: str):
+        res = self.client.session.post(self.api_path + 'notify/', json=dict(
+            subject=subject, content=content, target=target, severity=severity))
+        if res.status_code != 200:
+            open('index.html', 'w').writelines(res.text.split('.'))
+            raise ValueError(res.json())
+
+    def warn(self, subject: str, content: str, target: str):
+        self._notify(subject, content, target, 'warn')
+
+    def inform(self, subject: str, content: str, target: str):
+        self._notify(subject, content, target, 'info')
+
 
 class BaseResourcePermission(BaseModel):
     namespace = ['permissions']
