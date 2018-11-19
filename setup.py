@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Terrene",
-    version="2.0.2",
+    version="2.0.3",
     description="Terrene's Python SDK",
     url="https://docs.terrene.co",
     author="Terrene",
