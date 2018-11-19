@@ -26,6 +26,13 @@ class EndToEndTestCases(unittest.TestCase):
         dataframe, stderr = reducer.run(open('dist/titanic.csv'))
         print(dataframe, stderr)
 
+        time.sleep(1)
+        # test if reducer notifications work
+        reducer.warn('test', 'test', 'read')
+        time.sleep(1)
+        reducer.inform('test', 'test', 'read')
+
+        time.sleep(1)
         # create a tframe and load the data into it
         from .store import TFrame
 
