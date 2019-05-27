@@ -6,7 +6,7 @@
 ### Install From Source
 
 ```
-git clone https://git.terrene.co/open-source/terrene-python-sdk
+git clone git@github.com:terreneco/python-sdk.git
 cd python-sdk
 cmd/install
 ```
